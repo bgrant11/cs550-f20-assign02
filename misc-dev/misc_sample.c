@@ -3,6 +3,8 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 
+#define MSG_LEN 13
+
 static int sample_open(struct inode *inode, struct file *file)
 {
     pr_info("I have been awoken\n");
@@ -22,12 +24,25 @@ static ssize_t sample_write(struct file *file, const char __user *buf,
     return len; /* But we don't actually do anything with the data */
 }
 
+static ssize_t my_read(struct file *file, const char __user *buf,
+		       size_t len, loff_t *ppos)
+{
+	int err;
+	err = copy_to_user(buf, "Hello World!", MSG_LEN);
+	if(err != 0){
+		pr_info("Problem sending message to user, %d\n", err);
+		return -1;
+	}
+	return MSG_LEN;
+}
+
 static const struct file_operations sample_fops = {
     .owner			= THIS_MODULE,
     .write			= sample_write,
     .open			= sample_open,
     .release		= sample_close,
     .llseek 		= no_llseek,
+	.read			+ my_read,
 };
 
 struct miscdevice sample_device = {
