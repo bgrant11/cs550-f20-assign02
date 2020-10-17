@@ -1,1 +1,0 @@
-cmd_/home/work/cs/20fall/550/cs550-f20-assign02/misc-dev/misc_sample.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/work/cs/20fall/550/cs550-f20-assign02/misc-dev/misc_sample.ko /home/work/cs/20fall/550/cs550-f20-assign02/misc-dev/misc_sample.o /home/work/cs/20fall/550/cs550-f20-assign02/misc-dev/misc_sample.mod.o ;  true
