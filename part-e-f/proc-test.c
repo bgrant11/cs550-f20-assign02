@@ -10,8 +10,8 @@
 int main(int argc, char **argv){
 	int fd;
 	// open device
-	if( ( fd = open("/dev/proc-list", O_RDONLY)) < 0) {
-		printf("Error opening /dev/proc-list\n");
+	if( ( fd = open("/dev/process_list", O_RDONLY)) < 0) {
+		printf("Error opening /dev/process_list\n");
 		return -1;
 	}
 	char *buffer = malloc(sizeof(char) * 100);

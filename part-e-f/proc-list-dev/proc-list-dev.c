@@ -25,7 +25,25 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 	struct task_struct * process;
 	for_each_process(process){
 		i++;
-		pr_info("pid: %d\n", process->pid);
+		pr_info("PID: %d\t", process->pid);
+		pr_info("PPID: %d\t", process->parent->pid);
+		pr_info("CPU: %d\t", process->cpu);
+		pr_info("STATE: ");
+		if(process->state | 0x0000) pr_info("TASK_RUNNING, ");
+		if(process->state | 0x0001) pr_info("TASK_INTERRUPTIBLE, ");
+		if(process->state | 0x0002) pr_info("TASK_UNINTERRUPTIBLE	, ");
+		if(process->state | 0x0004) pr_info("__TASK_STOPPED, ");
+		if(process->state | 0x0008) pr_info("__TASK_TRACED, ");
+		if(process->state | 0x0010) pr_info("EXIT_DEAD, ");
+		if(process->state | 0x0020) pr_info("EXIT_ZOMBIE, ");
+		if(process->state | 0x0040) pr_info("TASK_PARKED, ");
+		if(process->state | 0x0080) pr_info("TASK_DEAD, ");
+		if(process->state | 0x0100) pr_info("TASK_WAKEKILL, ");
+		if(process->state | 0x0200) pr_info("TASK_WAKING, ");
+		if(process->state | 0x0400) pr_info("TASK_NOLOAD, ");
+		if(process->state | 0x0800) pr_info("TASK_NEW, ");
+		if(process->state | 0x1000) pr_info("TASK_STATE_MAX, ");
+		pr_info("\n");
 	}
 	pr_info("there are %d processes\n", i);
 	return 0;
@@ -41,7 +59,7 @@ static const struct file_operations proc_fops = {
 
 struct miscdevice proc_device = {
     .minor = MISC_DYNAMIC_MINOR,
-    .name = "proc_list",
+    .name = "process_list",
     .fops = &proc_fops,
 };
 
