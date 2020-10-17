@@ -3,6 +3,8 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/uaccess.h>
+#include <linux/sched.h>
+#include <linux/sched/signal.h>
 
 static int proc_open(struct inode *inode, struct file *file)
 {
@@ -19,6 +21,13 @@ static int proc_close(struct inode *inodep, struct file *filp)
 static ssize_t proc_read(struct file *file, char __user *buf,
 		       size_t len, loff_t *ppos)
 {
+	int i = 0;	
+	struct task_struct * process;
+	for_each_process(process){
+		i++;
+		pr_info("pid: %d\n", process->pid);
+	}
+	pr_info("there are %d processes\n", i);
 	return 0;
 }
 

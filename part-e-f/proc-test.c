@@ -14,8 +14,9 @@ int main(int argc, char **argv){
 		printf("Error opening /dev/proc-list\n");
 		return -1;
 	}
-	char *buffer;
+	char *buffer = malloc(sizeof(char) * 100);
 	//allocate mem for buffer
+	int buffer_len = 100;
 	int bytes_read = read(fd, buffer, buffer_len);
 	if(bytes_read < 0){
 		printf("Error reading proc list\n");
