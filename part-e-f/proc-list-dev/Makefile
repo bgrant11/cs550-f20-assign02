@@ -1,8 +1,5 @@
-# Simple Makefile to build a simple misc driver
-# Nick Glynn <Nick.Glynn@feabhas.com>
-#
-
-obj-m += misc_sample.o
+CONFIG_MODULE_SIG=n
+obj-m += proc-list-dev.o
 KDIR := /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
 
@@ -16,11 +13,17 @@ clean:
 	-rm *.o *.ko *.mod.{c,o} modules.order Module.symvers || true
 
 in:
-	sudo insmod misc_sample.ko
+	sudo insmod proc-list-dev.ko
 
 out:
-	sudo rmmod misc_sample
+	sudo rmmod proc-list-dev
 
 #Username: bgrant11    
 #IP: 128.226.28.59
 #Password: NWKqjEi73
+
+#/home/bgrant11/cs550-f20-assign02
+
+#//home/work/cs/20fall/550/cs550-f20-assign02
+
+

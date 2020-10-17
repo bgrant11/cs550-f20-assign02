@@ -10,8 +10,9 @@
 int main(int argc, char **argv){
 	int fd;
 	// open device
-	if( ( fd = open("/dev/misc_sample", O_RDWR)) < 0) {
+	if( ( fd = open("/dev/simple_misc", O_RDWR)) < 0) {
 		printf("Error opening /dev/misc_sample\n");
+		return -1;
 	}
 	// test write
 	char str[100] = "This is a string";

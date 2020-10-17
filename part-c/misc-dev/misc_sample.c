@@ -2,6 +2,7 @@
 #include <linux/fs.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
+#include <linux/uaccess.h>
 
 #define MSG_LEN 13
 
@@ -24,7 +25,7 @@ static ssize_t sample_write(struct file *file, const char __user *buf,
     return len; /* But we don't actually do anything with the data */
 }
 
-static ssize_t my_read(struct file *file, const char __user *buf,
+static ssize_t my_read(struct file *file, char __user *buf,
 		       size_t len, loff_t *ppos)
 {
 	int err;
@@ -42,7 +43,7 @@ static const struct file_operations sample_fops = {
     .open			= sample_open,
     .release		= sample_close,
     .llseek 		= no_llseek,
-	.read			+ my_read,
+	.read			= my_read,
 };
 
 struct miscdevice sample_device = {
