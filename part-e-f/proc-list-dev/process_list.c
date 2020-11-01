@@ -5,22 +5,97 @@
 #include <linux/uaccess.h>
 #include <linux/sched.h>
 #include <linux/sched/signal.h>
+#include <linux/slab.h>
+#include "proc_list.h"
+
+
+node * head;
+node * curr;
+long total_process;
+
+void delete_list(void){
+	node* local_curr = head;
+	node* next;
+	while(curr != NULL){
+		next = local_curr->next;
+		kfree(local_curr);
+		local_curr = next;
+	}
+}
+
+int count_procs(int total){
+	int count = 0;
+	node * curr = head;
+	while(curr != NULL){
+			count++;
+			curr = curr->next;
+	}
+	if(count == total){
+		return 0;
+	} else {
+		delete_list();		
+		return -2;
+	}
+}
+
+
+int gen_proc_list(void){
+	struct task_struct * process;
+	node * curr = head;
+	total_process = 0;
+		
+	for_each_process(process){
+		total_process++;
+		curr = (struct node*)kmalloc(BUF_SIZE, GFP_KERNEL);
+		curr->next = NULL;
+		curr->p_info.pid = process->pid;
+		curr->p_info.ppid = process->parent->pid;
+		curr->p_info.cpu = process->cpu;
+		curr->p_info.state = process->state;
+		curr = curr->next;
+	}
+	return count_procs(total_process);
+}
+
 
 static int proc_open(struct inode *inode, struct file *file)
 {
     pr_info("Opening Proc List Device\n");
-    return 0;
+	curr = head;    
+	return gen_proc_list();
 }
 
 static int proc_close(struct inode *inodep, struct file *filp)
 {
     pr_info("Closing Proc List Device\n");
+	delete_list();
     return 0;
 }
 
 static ssize_t proc_read(struct file *file, char __user *buf,
 		       size_t len, loff_t *ppos)
 {
+	int err;
+	char * proc_info_char;	
+	if(len < BUF_SIZE){
+		pr_info("bytes requested must be at least %ld\n", BUF_SIZE);
+		return -2;
+	}
+	if(curr == NULL){
+		return 0;
+	}
+	proc_info_char = (char*)curr;	
+	err = copy_to_user(buf, proc_info_char, BUF_SIZE);
+	if(err != 0){
+		pr_info("Problem sending message to user, %d\n", err);
+		return -1;
+	}
+	curr = curr->next;
+	return BUF_SIZE;
+	
+	
+		
+	/*	
 	int i = 0;	
 	struct task_struct * process;
 	for_each_process(process){
@@ -46,6 +121,7 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 		pr_info("\n");
 	}
 	pr_info("there are %d processes\n", i);
+	*/
 	return 0;
 }
 

@@ -1,5 +1,5 @@
 CONFIG_MODULE_SIG=n
-obj-m += proc-list-dev.o
+obj-m += process_list.o
 KDIR := /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
 
@@ -13,10 +13,10 @@ clean:
 	-rm *.o *.ko *.mod.{c,o} modules.order Module.symvers || true
 
 in:
-	sudo insmod proc-list-dev.ko
+	sudo insmod process_list.ko
 
 out:
-	sudo rmmod proc-list-dev
+	sudo rmmod process_list
 
 #Username: bgrant11    
 #IP: 128.226.28.59
