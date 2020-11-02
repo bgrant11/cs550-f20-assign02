@@ -30,9 +30,8 @@ int main(int argc, char **argv){
 		p_info = (process_info*)buffer;
 		print_proc(p_info);
 	}
+	free(buffer);	
 	close(fd);
-
-
 	return 0;
 }
 
