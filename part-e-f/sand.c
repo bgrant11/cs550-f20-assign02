@@ -29,8 +29,7 @@ void delete_list(void){
 	}
 }
 
-int count_procs(int total){
-	printf("total %d\n", total);	
+int count_procs(int total){	
 	int count = 0;
 	node * curr = head;
 	while(curr->next != NULL){

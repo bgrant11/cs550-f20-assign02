@@ -11,6 +11,9 @@ test: proc-test
 val: proc-test
 	sudo valgrind -v --leak-check=full --show-leak-kinds=all ./proc-test
 
+gdb: proc-test
+	sudo gdb proc-test
+
 clean:
 	rm -f proc-test sand
 

@@ -15,7 +15,7 @@ int main(int argc, char **argv){
 	int fd;
 	// open device
 	if( ( fd = open("/dev/process_list", O_RDONLY)) < 0) {
-		printf("Error opening /dev/process_list\n");
+		printf("Error opening /dev/process_list: %d\n", fd);
 		return -1;
 	}
 	char *buffer = malloc(BUF_SIZE);
