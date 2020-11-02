@@ -1,0 +1,55 @@
+Brian Grant
+
+Writeup for Parts A, B, C, D
+
+I learned how to access my assigned vm
+I do this by ssh-ing into remote.cs, and then ssh-ing into the vm.
+Initially I was programming on my computer. When it came time to test
+on the vm I first used sftp to transfer to remote, then sftp again
+to transfer from remote to vm.
+Then I was making modifications on the programs in the vm via vim.
+All the aforementioned was convoluted and not great for keeping track of
+the most recent changes to my program.
+So now I am making all updates to my program on my machine, pushing to github,
+and pulling those changes from github in the vm. So now I am not making
+modifications to code in the vm, and I always know where my latest
+source is.
+
+Part B was pretty straight forward. Compiling modules, loading them,
+running them with or without arguments, unloading modules, checking that
+the module is loaded via lsmod, and looking at the module output via dmesg
+
+Part C, I used what I learned in part B, and material from the class
+to add a .read function to the module that sends "hello world" to user space
+upon calling the read sys call on the module. This was tested in a user space
+program where this sys call was invoked. In this user space program I also 
+made a call to write for fun.
+
+Part D, I have been browsing the linux source code to brainstorm how
+I will implement part E, and F. We were shown the task_struct which seems
+to contain all the info we need for our module. 
+I also found the macro for_each_process in linux/sched/signal.h.
+This macro takes a pointer to a task_struct, initializes it to the init_task
+and iterates over each process using the next_task macro.
+
+I am currently playing around with the above, and I believe I can successfully
+print the info about each process in the kernel logs.
+
+What I still need to figure out is how to send this info to the user space program
+given the program structure given to us. 
+
+In the program structure given to us, there is a read in a while loop that 
+ends on some exit condition. 
+
+Initially I thought that I would be sending all process info over in one read.
+I don't understand why it is in a loop. Perhaps the info is sent over piece 
+by piece? But the problem there is that there would have to be some sort of 
+global tracker of where the last read left off, so the following read
+knows where to pick it back up. But the problem with that is this would 
+make the code non-reentrant because if another program uses the module,
+there would be a conflict over this tracker, and only partial process lists 
+would be returned. 
+
+I plan on asking some questions to get some clarifications, otherwise, I think
+the for_each_process macro will get me the info I need. I just have to figure
+out how it is supposed to be sent to user space programs.
