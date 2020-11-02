@@ -18,7 +18,7 @@ void delete_list(void){
 	node* next;
 	while(local_curr != NULL){
 		next = local_curr->next;
-		free(local_curr);
+		kfree(local_curr);
 		local_curr = next;
 	}
 }
@@ -41,14 +41,15 @@ int count_procs(int total){
 
 int gen_proc_list(void){
 	struct task_struct * process;
-	head = (node*)malloc(NODE_SIZE);
+	node * curr;	
+	head = (node*)kmalloc(NODE_SIZE, GFP_KERNEL);
 	head->next = NULL;	
-	node * curr = head;
+	curr = head;
 	total_process = 0;
 		
 	for_each_process(process){
 		total_process++;
-		curr->next = (struct node*)kmalloc(BUF_SIZE, GFP_KERNEL);
+		curr->next = (struct node*)kmalloc(NODE_SIZE, GFP_KERNEL);
 		curr = curr->next;
 		curr->next = NULL;
 		curr->p_info.pid = process->pid;
