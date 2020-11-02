@@ -11,3 +11,4 @@ typedef struct node {
 } node;
 
 #define BUF_SIZE sizeof(process_info)
+#define NODE_SIZE sizeof(node)

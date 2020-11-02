@@ -16,17 +16,17 @@ long total_process;
 void delete_list(void){
 	node* local_curr = head;
 	node* next;
-	while(curr != NULL){
+	while(local_curr != NULL){
 		next = local_curr->next;
-		kfree(local_curr);
+		free(local_curr);
 		local_curr = next;
 	}
 }
 
-int count_procs(int total){
+int count_procs(int total){	
 	int count = 0;
 	node * curr = head;
-	while(curr != NULL){
+	while(curr->next != NULL){
 			count++;
 			curr = curr->next;
 	}
@@ -41,18 +41,20 @@ int count_procs(int total){
 
 int gen_proc_list(void){
 	struct task_struct * process;
+	head = (node*)malloc(NODE_SIZE);
+	head->next = NULL;	
 	node * curr = head;
 	total_process = 0;
 		
 	for_each_process(process){
 		total_process++;
-		curr = (struct node*)kmalloc(BUF_SIZE, GFP_KERNEL);
+		curr->next = (struct node*)kmalloc(BUF_SIZE, GFP_KERNEL);
+		curr = curr->next;
 		curr->next = NULL;
 		curr->p_info.pid = process->pid;
 		curr->p_info.ppid = process->parent->pid;
 		curr->p_info.cpu = process->cpu;
 		curr->p_info.state = process->state;
-		curr = curr->next;
 	}
 	return count_procs(total_process);
 }
@@ -81,6 +83,7 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 		pr_info("bytes requested must be at least %ld\n", BUF_SIZE);
 		return -2;
 	}
+	curr = curr->next;
 	if(curr == NULL){
 		return 0;
 	}
@@ -90,7 +93,6 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 		pr_info("Problem sending message to user, %d\n", err);
 		return -1;
 	}
-	curr = curr->next;
 	return BUF_SIZE;
 	
 	
