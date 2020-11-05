@@ -1,8 +1,8 @@
 typedef struct process_info {
-	long pid;
-	long ppid;
-	long cpu;
-	long state;
+	int pid;
+	int ppid;
+	int cpu;
+	int state;
 } process_info;
 
 typedef struct node {

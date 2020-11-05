@@ -37,9 +37,9 @@ int main(int argc, char **argv){
 }
 
 void print_proc(process_info * process){
-	printf("PID: %ld\t", process->pid);
-	printf("PPID: %ld\t", process->ppid);
-	printf("CPU: %ld\t", process->cpu);
+	printf("PID: %d\t", process->pid);
+	printf("PPID: %d\t", process->ppid);
+	printf("CPU: %d\t", process->cpu);
 	printf("STATE: ");
 	if(process->state & 0x0000) printf("TASK_RUNNING, ");
 	if(process->state & 0x0001) printf("TASK_INTERRUPTIBLE, ");
