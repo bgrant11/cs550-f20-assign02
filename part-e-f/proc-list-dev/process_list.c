@@ -121,8 +121,8 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 		return 0;
 	}
 	proc_info_char = (char*)(curr->p_info);
-	//err = copy_to_user(buf, proc_info_char, BUF_SIZE);
-	err = copy_to_user(buf, curr->p_info, BUF_SIZE);
+	err = copy_to_user(buf, proc_info_char, BUF_SIZE);
+	//err = copy_to_user(buf, curr->p_info, BUF_SIZE);
 	if(err != 0){
 		pr_info("Problem sending message to user, %d\n", err);
 		return -1;
