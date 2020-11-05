@@ -15,23 +15,22 @@ long total_process;
 long total_reads;
 
 void delete_list(void){
-	node* local_curr = head->next;
+	node* local_curr = head;
 	node* next;
 	pr_info("deleting list\n");	
-	while(local_curr != head){
+	while(local_curr != NULL){
 		next = local_curr->next;
 		kfree(local_curr);
 		local_curr = next;
 	}
-	kfree(head);
 	pr_info("deleting list end\n");	
 }
 
 int count_procs(int total){	
 	int count = 0;
-	node * curr = head->next;
+	node * curr = head;
 	pr_info("count_procs\n");	
-	while(curr->next != head){
+	while(curr->next != NULL){
 			count++;
 			curr = curr->next;
 	}
@@ -47,7 +46,7 @@ int count_procs(int total){
 void test_print(void){	
 	node * curr = head->next;
 	pr_info("test print\n");	
-	while(curr != head){	
+	while(curr != NULL){	
 		pr_info("PID: %d\t", curr->p_info.pid);
 		pr_info("PPID: %d\t", curr->p_info.ppid);
 		pr_info("CPU: %d\t", curr->p_info.cpu);
@@ -63,7 +62,7 @@ int gen_proc_list(void){
 	struct task_struct * process;
 	node * curr;	
 	head = (node*)kmalloc(NODE_SIZE, GFP_KERNEL);
-	head->next = head;	
+	head->next = NULL;	
 	curr = head;
 	total_process = 0;
 	total_reads = 0;	
@@ -72,7 +71,7 @@ int gen_proc_list(void){
 		total_process++;
 		curr->next = (struct node*)kmalloc(NODE_SIZE, GFP_KERNEL);
 		curr = curr->next;
-		curr->next = head;
+		curr->next = NULL;
 		curr->p_info.pid = process->pid;
 		curr->p_info.ppid = process->parent->pid;
 		curr->p_info.cpu = process->cpu;
@@ -108,13 +107,14 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 	int err;
 	char * proc_info_char;	
 	pr_info("proc_read\n");	
-	pr_info("%ld of %ld\n", total_reads, total_process);
+	pr_info("%ld of %ld\n", total_reads, total_processes);
 	if(len < BUF_SIZE){
 		pr_info("bytes requested must be at least %ld\n", BUF_SIZE);
 		return -2;
 	}
 	curr = curr->next;
-	if(curr == head){
+	if(curr == NULL){
+		curr = head;		
 		return 0;
 	}
 	proc_info_char = (char*)(&(curr->p_info));
