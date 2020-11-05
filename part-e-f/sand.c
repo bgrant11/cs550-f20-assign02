@@ -10,10 +10,10 @@ long total_process;
 
 
 void print_proc(process_info * process){
-	printf("PID: %ld\t", process->pid);
-	printf("PPID: %ld\t", process->ppid);
-	printf("CPU: %ld\t", process->cpu);
-	printf("STATE: %ld\t", process->state);
+	printf("PID: %d\t", process->pid);
+	printf("PPID: %d\t", process->ppid);
+	printf("CPU: %d\t", process->cpu);
+	printf("STATE: %d\t", process->state);
 
 	printf("\n");
 
@@ -52,7 +52,7 @@ int gen_proc_list(void){
 	node * curr = head;
 	total_process = 0;
 		
-	for(int i =0; i < 20; i++){
+	for(int i =0; i < 50; i++){
 		total_process++;
 		curr->next = (node*)malloc(NODE_SIZE);
 		curr = curr->next;		
