@@ -92,7 +92,7 @@ static int proc_open(struct inode *inode, struct file *file)
 {
 	int ret;    
 	pr_info("Opening Proc List Device\n");
-	curr = head;    
+	curr = head->next;    
 	ret = gen_proc_list();
 	pr_info("Opening Proc List Device end\n");	
 	return ret;
@@ -116,7 +116,6 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 		pr_info("bytes requested must be at least %ld\n", BUF_SIZE);
 		return -2;
 	}
-	curr = curr->next;
 	if(curr == NULL){
 		curr = head;		
 		return 0;
@@ -128,6 +127,7 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 		pr_info("Problem sending message to user, %d\n", err);
 		return -1;
 	}
+	curr = curr->next;
 	return BUF_SIZE;
 	
 	
