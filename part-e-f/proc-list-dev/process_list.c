@@ -12,6 +12,7 @@
 node * head;
 node * curr;
 long total_process;
+long total_reads;
 
 void delete_list(void){
 	node* local_curr = head;
@@ -64,6 +65,7 @@ int gen_proc_list(void){
 	head->next = NULL;	
 	curr = head;
 	total_process = 0;
+	total_reads = 0;	
 	pr_info("generating proc list\n");
 	for_each_process(process){
 		total_process++;
@@ -104,6 +106,8 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 {
 	int err;
 	char * proc_info_char;	
+	pr_info("proc_read\n");	
+	pr_info("%ld of %ld\n", total_reads, total_process);
 	if(len < BUF_SIZE){
 		pr_info("bytes requested must be at least %ld\n", BUF_SIZE);
 		return -2;
