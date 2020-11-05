@@ -23,6 +23,7 @@ int main(int argc, char **argv){
 	int bytes_read = 1;
 	while( bytes_read != 0){
 		bytes_read = read(fd, buffer, BUF_SIZE);
+		printf("bytes_read: %d\n", bytes_read);
 		if(bytes_read < 0){
 			printf("Error reading proc list: %d\n", bytes_read);
 			perror("Error: ");
