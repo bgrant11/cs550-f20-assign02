@@ -24,7 +24,7 @@ int main(int argc, char **argv){
 	while( bytes_read != 0){
 		bytes_read = read(fd, buffer, BUF_SIZE);
 		if(bytes_read < 0){
-			printf("Error reading proc list\n");
+			printf("Error reading proc list: %d\n", bytes_read);
 			return -1;
 		}
 		p_info = (process_info*)buffer;
