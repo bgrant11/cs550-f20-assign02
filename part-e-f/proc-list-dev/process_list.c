@@ -111,6 +111,7 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 	int err;
 	char * proc_info_char;	
 	pr_info("proc_read\n");	
+	total_reads++;
 	pr_info("%ld of %ld\n", total_reads, total_process);
 	if(len < BUF_SIZE){
 		pr_info("bytes requested must be at least %ld\n", BUF_SIZE);
