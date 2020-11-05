@@ -16,6 +16,7 @@ long total_process;
 void delete_list(void){
 	node* local_curr = head;
 	node* next;
+	pr_info("deleting list\n");	
 	while(local_curr != NULL){
 		next = local_curr->next;
 		kfree(local_curr);
@@ -26,6 +27,7 @@ void delete_list(void){
 int count_procs(int total){	
 	int count = 0;
 	node * curr = head;
+	pr_info("count_procs\n");	
 	while(curr->next != NULL){
 			count++;
 			curr = curr->next;
@@ -38,8 +40,9 @@ int count_procs(int total){
 	}
 }
 
-void test_print(void){
+void test_print(void){	
 	node * curr = head->next;
+	pr_info("test print\n");	
 	while(curr != NULL){	
 		pr_info("PID: %d\t", curr->p_info.pid);
 		pr_info("PPID: %d\t", curr->p_info.ppid);
@@ -57,7 +60,7 @@ int gen_proc_list(void){
 	head->next = NULL;	
 	curr = head;
 	total_process = 0;
-		
+	pr_info("generating proc list\n");
 	for_each_process(process){
 		total_process++;
 		curr->next = (struct node*)kmalloc(NODE_SIZE, GFP_KERNEL);
