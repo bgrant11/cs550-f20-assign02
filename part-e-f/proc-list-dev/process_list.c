@@ -118,6 +118,7 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 		return -2;
 	}
 	if(curr == NULL){
+		pr_info("end read");		
 		curr = head;		
 		return 0;
 	}
