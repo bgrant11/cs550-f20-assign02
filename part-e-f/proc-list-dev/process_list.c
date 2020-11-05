@@ -22,6 +22,7 @@ void delete_list(void){
 		kfree(local_curr);
 		local_curr = next;
 	}
+	pr_info("deleting list end\n");	
 }
 
 int count_procs(int total){	
@@ -32,6 +33,7 @@ int count_procs(int total){
 			count++;
 			curr = curr->next;
 	}
+	pr_info("count_procs end\n");
 	if(count == total){
 		return 0;
 	} else {
@@ -51,9 +53,11 @@ void test_print(void){
 		pr_info("\n");
 		curr = curr->next;
 	}
+	pr_info("test print end\n");
 }
 
 int gen_proc_list(void){
+	int ret;	
 	struct task_struct * process;
 	node * curr;	
 	head = (node*)kmalloc(NODE_SIZE, GFP_KERNEL);
@@ -73,14 +77,19 @@ int gen_proc_list(void){
 	}
 	
 	test_print();
-	return count_procs(total_process);
+	ret = count_procs(total_process);
+	pr_info("generating proc list end\n");
+	return ret;
 }
 
 static int proc_open(struct inode *inode, struct file *file)
 {
-    pr_info("Opening Proc List Device\n");
+	int ret;    
+	pr_info("Opening Proc List Device\n");
 	curr = head;    
-	return gen_proc_list();
+	ret = gen_proc_list();
+	pr_info("Opening Proc List Device end\n");	
+	return ret;
 }
 
 static int proc_close(struct inode *inodep, struct file *filp)
