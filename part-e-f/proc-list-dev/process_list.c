@@ -75,6 +75,7 @@ int gen_proc_list(void){
 		curr = curr->next;
 		curr->next = NULL;
 		curr->p_info = (process_info*)kmalloc(BUF_SIZE, GFP_KERNEL);
+		pr_info("%d\n", process->pid);		
 		curr->p_info->pid = process->pid;
 		curr->p_info->ppid = process->parent->pid;
 		curr->p_info->cpu = process->cpu;
