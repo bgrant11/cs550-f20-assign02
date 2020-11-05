@@ -20,6 +20,7 @@ void delete_list(void){
 	pr_info("deleting list\n");	
 	while(local_curr != NULL){
 		next = local_curr->next;
+		kfree(local_curr->p_info);		
 		kfree(local_curr);
 		local_curr = next;
 	}
@@ -47,10 +48,10 @@ void test_print(void){
 	node * curr = head->next;
 	pr_info("test print\n");	
 	while(curr != NULL){	
-		pr_info("PID: %d\t", curr->p_info.pid);
-		pr_info("PPID: %d\t", curr->p_info.ppid);
-		pr_info("CPU: %d\t", curr->p_info.cpu);
-		pr_info("STATE: %d\t", curr->p_info.state);
+		pr_info("PID: %d\t", curr->p_info->pid);
+		pr_info("PPID: %d\t", curr->p_info->ppid);
+		pr_info("CPU: %d\t", curr->p_info->cpu);
+		pr_info("STATE: %d\t", curr->p_info->state);
 		pr_info("\n");
 		curr = curr->next;
 	}
@@ -62,6 +63,7 @@ int gen_proc_list(void){
 	struct task_struct * process;
 	node * curr;	
 	head = (node*)kmalloc(NODE_SIZE, GFP_KERNEL);
+	head->p_info = NULL;
 	head->next = NULL;	
 	curr = head;
 	total_process = 0;
@@ -72,10 +74,11 @@ int gen_proc_list(void){
 		curr->next = (struct node*)kmalloc(NODE_SIZE, GFP_KERNEL);
 		curr = curr->next;
 		curr->next = NULL;
-		curr->p_info.pid = process->pid;
-		curr->p_info.ppid = process->parent->pid;
-		curr->p_info.cpu = process->cpu;
-		curr->p_info.state = process->state;
+		curr->p_info = (process_info*)kmalloc(BUF_SIZE, GFP_KERNEL);
+		curr->p_info->pid = process->pid;
+		curr->p_info->ppid = process->parent->pid;
+		curr->p_info->cpu = process->cpu;
+		curr->p_info->state = process->state;
 	}
 	
 	test_print();
@@ -117,7 +120,7 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 		curr = head;		
 		return 0;
 	}
-	proc_info_char = (char*)(&(curr->p_info));
+	proc_info_char = (char*)(curr->p_info);
 	err = copy_to_user(buf, proc_info_char, BUF_SIZE);
 	if(err != 0){
 		pr_info("Problem sending message to user, %d\n", err);

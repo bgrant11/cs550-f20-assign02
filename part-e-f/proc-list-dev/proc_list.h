@@ -6,7 +6,7 @@ typedef struct process_info {
 } process_info;
 
 typedef struct node {
-	process_info p_info;
+	process_info * p_info;
 	struct node * next;
 } node;
 
