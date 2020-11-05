@@ -114,7 +114,7 @@ static ssize_t proc_read(struct file *file, char __user *buf,
 		return -2;
 	}
 	curr = curr->next;
-	if(curr == NULL){
+	if(curr == head){
 		return 0;
 	}
 	proc_info_char = (char*)(&(curr->p_info));
