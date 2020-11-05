@@ -39,7 +39,7 @@ int count_procs(int total){
 }
 
 void test_print(void){
-	node * curr = head;
+	node * curr = head->next;
 	while(curr != NULL){	
 		pr_info("PID: %d\t", curr->p_info.pid);
 		pr_info("PPID: %d\t", curr->p_info.ppid);
