@@ -92,8 +92,8 @@ static int proc_open(struct inode *inode, struct file *file)
 {
 	int ret;    
 	pr_info("Opening Proc List Device\n");
-	curr = head->next;    
 	ret = gen_proc_list();
+	curr = head->next;
 	pr_info("Opening Proc List Device end\n");	
 	return ret;
 }
